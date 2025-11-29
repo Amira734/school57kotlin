@@ -4,49 +4,50 @@
 Найти все строки со словом ERROR во всех логах в каталоге logs (включая logs/old) и сохранить их в файл errors.txt в корне проекта.
 
 ```bash
-TODO()
+grep -r "ERROR" ./logs/ > errors.txt
+
 ```
 
 ## Задание 2. Архивация старых логов
 Создать каталог archived/ в корне проекта и переместить туда все файлы из logs/old.
 
 ```bash
-TODO()
+mv ./logs/old archived
 ```
 
 ## Задание 3. Подсчёт размера логов
 Посчитать общий размер каталога logs и записать результат в logs_size.txt.
 
 ```bash
-TODO()
+// du -a ./logs logs_size.txt
 ```
 
 ## Задание 4. Нахождение самого большого лог-файла
 Найти самый большой файл в каталоге logs (без учёта подкаталогов) и записать его имя в файл biglog.txt.
 
 ```bash
-TODO()
+TODO() //head
 ```
 
 ## Задание 5. Подсчёт количества логов
 Подсчитать количество файлов с расширением .log во всём каталоге logs и сохранить результат в log_count.txt.
 
 ```bash
-TODO()
+find logs -name "*.logs" | wc -l > logs_count.txt
 ```
 
 ## Задание 6. Поиск конфигурационных параметров
 Найти во всех config/*.conf строки, содержащие слово "host", и записать в host_params.txt.
 
 ```bash
-TODO()
+find config -name "*.conf" -exec grep "host" {} \;
 ```
 
 ## Задание 7. Создание резервного архива конфигов
 Создать zip-архив config_backup.zip, содержащий все файлы из config/.
 
 ```bash
-TODO()
+zip -r config_backup.zip config/*.conf 2>/dev/null 
 ```
 
 ## Задание 8. Создание общего резервного архива
@@ -56,7 +57,7 @@ TODO()
 - файл errors.txt (если он есть)
 
 ```bash
-TODO()
+zip -r project_backup.zip config/*.conf log/*.logs logs/old/*.logs errors.txt 2>/dev/null
 ```
 
 ## Задание 9. Очистка пустых строк в логах
