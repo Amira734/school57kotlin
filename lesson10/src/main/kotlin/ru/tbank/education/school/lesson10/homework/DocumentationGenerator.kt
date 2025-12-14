@@ -8,27 +8,22 @@ object DocumentationGenerator {
     fun generateDoc(obj: Any): String {
         val kClass = obj::class
 
-        // 1. Класс скрыт
         if (kClass.findAnnotation<InternalApi>() != null) {
             return "Документация скрыта (InternalApi)."
         }
 
-        // 2. Нет аннотации DocClass
         val docClass = kClass.findAnnotation<DocClass>()
             ?: return "Нет документации для класса."
 
         val sb = StringBuilder()
 
-        // ===== Заголовок =====
         sb.appendLine("=== Документация: ${kClass.simpleName} ===")
         sb.appendLine("Описание: ${docClass.description}")
         sb.appendLine("Автор: ${docClass.author}")
         sb.appendLine("Версия: ${docClass.version}")
         sb.appendLine()
 
-        // ===== Свойства =====
 
-        // Имена свойств, скрытых через @InternalApi на constructor parameter
         val internalConstructorProperties = kClass.primaryConstructor
             ?.parameters
             ?.filter { it.findAnnotation<InternalApi>() != null }
@@ -56,7 +51,6 @@ object DocumentationGenerator {
             sb.appendLine()
         }
 
-        // ===== Методы =====
 
         val ignoredMethodNames = setOf("toString", "equals", "hashCode", "copy")
 
