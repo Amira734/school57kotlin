@@ -1,5 +1,9 @@
 package homework
 
+import kotlin.collections.minusAssign
+import kotlin.collections.plusAssign
+import kotlin.text.compareTo
+
 
 /**
  *
@@ -18,12 +22,21 @@ package homework
 class BankAccount(val id: String, var balance: Int) {
 
     fun transfer(to: BankAccount, amount: Int) {
-        synchronized(this) {
-            Thread.sleep(10)
-            
-            synchronized(to) {
-                if (balance >= amount) {
-                    balance -= amount
+        val first: BankAccount
+        val second: BankAccount
+
+        if (this.id < to.id) {
+            first = this
+            second = to
+        } else {
+            first = to
+            second = this
+        }
+
+        synchronized(first) {
+            synchronized(second) {
+                if (this.balance >= amount) {
+                    this.balance -= amount
                     to.balance += amount
                 }
             }

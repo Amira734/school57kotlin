@@ -1,3 +1,5 @@
+import java.util.concurrent.atomic.AtomicBoolean
+
 /**
  *
  * Проблема:
@@ -8,7 +10,7 @@
  */
 class VisibilityProblem {
 
-    private var running = true
+    private var running = AtomicBoolean(true)
 
     /**
      * Создает и возвращает поток writer.
@@ -21,9 +23,8 @@ class VisibilityProblem {
             repeat(100) {
                 Thread.sleep(10)
                 Thread.yield()
+                running.set(false)
             }
-
-            running = false
             println("Writer: установил running = false (изменение может быть не видно)")
         }
     }
@@ -33,15 +34,10 @@ class VisibilityProblem {
      * Поток читает флаг running в цикле и может зависнуть навсегда,
      * если не увидит изменение running = false.
      */
-    fun startReader(): Thread {
-        return Thread {
-            println("Reader: начал работу (ждет running = false)")
+    fun startReader(): Thread = Thread {
+        println("Reader: начал работу (ждет running = false)")
+        while (running.get()) { }
 
-            while (running) {
-
-            }
-
-            println("Reader: завершил работу (увидел running = false)")
-        }
+        println("Reader: завершил работу (увидел running = false)")
     }
 }
